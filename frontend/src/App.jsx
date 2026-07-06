@@ -9,12 +9,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ReviewDetail from './pages/ReviewDetail';
+import Admin from './pages/Admin';
 
 // Placeholder Pages
 const NewReview = () => <div className="p-8">New Review Workflow Placeholder</div>;
 const ReviewsList = () => <div className="p-8">Reviews History Placeholder</div>;
 const Settings = () => <div className="p-8">Settings Placeholder</div>;
-const Admin = () => <div className="p-8">Admin Dashboard Placeholder</div>;
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
