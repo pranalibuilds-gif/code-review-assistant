@@ -14,6 +14,7 @@ from app.models.metric import Metric
 from app.models.artifact import Artifact
 from app.models.enums import SubmissionType, ReviewStatus, Severity, FindingSource
 from app.repositories.user_repository import UserRepository
+from app.services.aggregation.aggregation_service import AggregationService
 
 def seed_data():
     db = SessionLocal()
@@ -80,6 +81,13 @@ def seed_data():
         print(f"Created metric: {metric.metric_name}")
 
         db.commit()
+
+        # Trigger Aggregation
+        print("\nTriggering Report Aggregation...")
+        agg_service = AggregationService(db)
+        report = agg_service.generate_report(review.id)
+        print(f"Aggregation complete. Final Score: {report.score}, Grade: {report.grade}")
+
         print("\nSeed data completed successfully. Object graph verified.")
 
     except Exception as e:

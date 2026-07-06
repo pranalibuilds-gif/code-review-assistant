@@ -12,6 +12,7 @@ from app.repositories.review_repository import ReviewRepository
 from app.repositories.finding_repository import FindingRepository
 from app.repositories.metric_repository import MetricRepository
 from app.analyzers.schemas import NormalizedFinding, NormalizedMetric
+from app.services.aggregation.aggregation_service import AggregationService
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +57,13 @@ class ReviewService:
             review.finished_at = datetime.now(timezone.utc)
             duration = (review.finished_at - review.started_at).total_seconds() * 1000
             review.duration_ms = int(duration)
+
+            # Flush to ensure everything is in DB before aggregation
+            self.db.flush()
+
+            if status != ReviewStatus.FAILED:
+                agg_service = AggregationService(self.db)
+                agg_service.generate_report(review.id)
 
         # Save findings
         if findings:

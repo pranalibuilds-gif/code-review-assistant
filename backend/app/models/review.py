@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import List, TYPE_CHECKING
-from sqlalchemy import String, Integer, Float, DateTime, ForeignKey, Enum as SQLEnum, Text
+from sqlalchemy import String, Integer, Float, DateTime, ForeignKey, Enum as SQLEnum, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -28,6 +28,7 @@ class Review(Base):
     summary: Mapped[str] = mapped_column(Text, nullable=True)
     ai_summary: Mapped[str] = mapped_column(Text, nullable=True)
     recommendations: Mapped[str] = mapped_column(Text, nullable=True)
+    cached_report: Mapped[dict] = mapped_column(JSON, nullable=True)
 
     status: Mapped[ReviewStatus] = mapped_column(
         SQLEnum(ReviewStatus), default=ReviewStatus.QUEUED, nullable=False
