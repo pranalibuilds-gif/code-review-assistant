@@ -12,7 +12,7 @@ from app.core.exceptions import (
     http_exception_handler,
     validation_exception_handler
 )
-from app.api.v1 import auth
+from app.api.v1 import auth, submissions
 
 # Initialize logging
 setup_logging()
@@ -80,6 +80,7 @@ async def system_info():
     }
 
 api_router.include_router(auth.router, prefix="/auth", tags=["authentication"])
+api_router.include_router(submissions.router, prefix="/submissions", tags=["submissions"])
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

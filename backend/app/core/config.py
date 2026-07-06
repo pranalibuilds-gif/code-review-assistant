@@ -27,6 +27,10 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str
 
+    # Storage
+    UPLOAD_DIR: str = "uploads"
+    MAX_UPLOAD_SIZE: int = 10 * 1024 * 1024 # 10MB
+
     # AI Provider
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     OLLAMA_MODEL: str = "llama3"
