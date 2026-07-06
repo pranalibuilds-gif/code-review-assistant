@@ -86,21 +86,24 @@ npm run dev
 
 ---
 
-## 📄 Documentation
+## 🏗️ Project Structure
 
-- [Architecture Deep-Dive](./docs/architecture/system-overview.md)
-- [API Reference](./docs/api/endpoints.md)
-- [Database Schema](./docs/architecture/database-design.md)
-- [Submission Pipeline](./docs/architecture/submission-pipeline.md)
+```text
+CodeSage/
+├── backend/            # FastAPI, SQLAlchemy, Analysis Logic
+├── frontend/           # React, Vite, Tailwind Dashboard
+├── docs/               # Technical Deep-Dives & Diagrams
+├── demo/               # Sample Reports & Seed Scripts
+├── tests/              # Pytest Suite (Unit & Integration)
+└── README.md           # This Page
+```
 
----
-
-## 📈 Future Roadmap
-
-- **Multi-Language Support:** Adding JavaScript, Java, and Go analyzers.
-- **CI/CD Integration:** Direct GitHub Action and GitLab Runner support.
-- **Team Workspaces:** Collaborative reviews and organization dashboards.
-- **IDE Plugins:** Extension for VS Code and JetBrains IDEs.
+## 📊 Demo & Verification
+To verify the application with a realistic dataset, run the V1 Release Seed script:
+```bash
+python demo/sample-data/v1_release_seed.py
+```
+This will populate your local database with **20 projects** and **170+ reviews**, demonstrating the full range of charts, trends, and AI insights.
 
 ---
 *Developed as a portfolio-quality engineering project during a software engineering internship.*

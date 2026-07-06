@@ -2,6 +2,13 @@
 
 All notable changes to **CodeSage** will be documented in this file.
 
+## [1.0.0] - 2026-07-07
+### Release Engineering & Engineering Final
+- **UX Polish:** Standardized design system, improved loading states, and refined error handling.
+- **Data Hardening:** Generated high-volume demo data with 20+ projects and 150+ reviews.
+- **Repository Cleanup:** Removed obsolete scripts, dead code, and moved tests to root.
+- **V1 Launch:** Formally tagged as Version 1.0.0.
+
 ## [0.1.0] - Phase 12 - Documentation & Portfolio
 - Completed project documentation.
 - Generated Architecture, ER, and Pipeline diagrams.
