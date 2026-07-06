@@ -8,7 +8,7 @@ from app.core.security import get_current_user, get_db
 from app.models.user import User
 from app.models.review import Review
 from app.schemas.report import ReviewDetailedResponse
-from app.services.export_service import ExportService
+from app.exports.export_service import ExportService
 
 router = APIRouter()
 
