@@ -4,9 +4,9 @@ function App() {
   const [health, setHealth] = useState(null)
 
   useEffect(() => {
-    fetch('/api/health')
+    fetch('/api/v1/health')
       .then(res => res.json())
-      .then(data => setHealth(data))
+      .then(data => setHealth(data.data))
       .catch(err => console.error("Failed to fetch health:", err))
   }, [])
 

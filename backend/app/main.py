@@ -1,29 +1,85 @@
-from fastapi import FastAPI
+import time
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.exceptions import RequestValidationError
 
-app = FastAPI(title="CodeSage API", version="0.0.1")
+from app.core.config import settings
+from app.core.logging import setup_logging
+from app.core.middleware import RequestIDMiddleware, LoggingMiddleware
+from app.core.exceptions import (
+    global_exception_handler,
+    http_exception_handler,
+    validation_exception_handler
+)
+
+# Initialize logging
+setup_logging()
+
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+)
 
 # Configure CORS
-# In production, this should be restricted to the frontend domain
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.get("/health")
+# Register Custom Middleware
+app.add_middleware(LoggingMiddleware)
+app.add_middleware(RequestIDMiddleware)
+
+# Register Exception Handlers
+app.add_exception_handler(Exception, global_exception_handler)
+app.add_exception_handler(StarletteHTTPException, http_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+
+# API v1 Router
+api_router = APIRouter()
+
+@api_router.get("/health")
 async def health_check():
     """
     Health check endpoint to verify system status.
     """
     return {
-        "status": "online",
-        "service": "codesage-api",
-        "version": "0.0.1"
+        "success": True,
+        "data": {
+            "status": "online",
+            "service": "codesage-api",
+            "version": settings.VERSION,
+            "timestamp": time.time(),
+            "environment": settings.ENVIRONMENT
+        }
     }
+
+@api_router.get("/system/info")
+async def system_info():
+    """
+    Detailed system information (intended for development).
+    """
+    return {
+        "success": True,
+        "data": {
+            "project_name": settings.PROJECT_NAME,
+            "version": settings.VERSION,
+            "api_prefix": settings.API_V1_STR,
+            "debug_mode": settings.DEBUG,
+            "ollama_config": {
+                "base_url": settings.OLLAMA_BASE_URL,
+                "model": settings.OLLAMA_MODEL
+            }
+        }
+    }
+
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=settings.PORT, reload=settings.DEBUG)
