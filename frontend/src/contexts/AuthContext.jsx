@@ -19,7 +19,8 @@ export const AuthProvider = ({ children }) => {
   const loadUser = async () => {
     try {
       const response = await getMe();
-      setUser(response.data);
+      const payload = response.data ?? response;
+      setUser(payload.data ?? payload);
     } catch (error) {
       localStorage.removeItem('token');
     } finally {
@@ -29,7 +30,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const response = await apiLogin(email, password);
-    const { access_token } = response;
+    const payload = response.data ?? response;
+    const { access_token } = payload.data ?? payload;
     localStorage.setItem('token', access_token);
     await loadUser();
     return response;

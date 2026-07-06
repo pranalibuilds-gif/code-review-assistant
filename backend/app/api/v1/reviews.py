@@ -12,6 +12,34 @@ from app.exports.export_service import ExportService
 
 router = APIRouter()
 
+@router.get("")
+def list_reviews(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    List all reviews belonging to the current user's projects.
+    """
+    from app.models.submission import Submission
+    from app.models.project import Project
+    from sqlalchemy import select, desc
+
+    stmt = (
+        select(Review)
+        .join(Submission)
+        .join(Project)
+        .where(Project.owner_id == current_user.id)
+        .where(Review.status.in_(["COMPLETED", "PARTIAL_SUCCESS"]))
+        .order_by(desc(Review.finished_at))
+    )
+
+    reviews = db.execute(stmt).scalars().all()
+
+    return {
+        "success": True,
+        "data": [r.cached_report for r in reviews if r.cached_report]
+    }
+
 @router.get("/{review_id}", response_model=ReviewDetailedResponse)
 def get_review_report(
     review_id: UUID,

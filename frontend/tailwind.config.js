@@ -4,25 +4,36 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         primary: {
-          main: "#6366f1",
-          soft: "#e0e7ff",
+          main: "var(--primary-main)",
+          soft: "var(--primary-soft)",
+          muted: "var(--primary-muted)",
         },
         surface: {
-          app: "#f8fafc",
-          card: "#ffffff",
-          border: "#e2e8f0",
+          app: "var(--surface-app)",
+          card: "var(--surface-card)",
+          border: "var(--surface-border)",
+          muted: "var(--surface-muted)",
+        },
+        text: {
+          base: "var(--text-base)",
+          muted: "var(--text-muted)",
+          inverse: "var(--text-inverse)",
         },
         status: {
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444",
-          info: "#3b82f6",
+          success: "var(--status-success)",
+          warning: "var(--status-warning)",
+          error: "var(--status-error)",
+          info: "var(--status-info)",
         }
-      }
+      },
+      boxShadow: {
+        soft: "var(--shadow-soft)",
+      },
     },
   },
   plugins: [],

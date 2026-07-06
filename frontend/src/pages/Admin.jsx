@@ -108,7 +108,7 @@ const Admin = () => {
           </h3>
           <Card className="overflow-hidden">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 border-b border-surface-border">
+              <thead className="bg-slate-900 border-b border-slate-800">
                 <tr>
                   <th className="px-4 py-3 font-bold">Job ID</th>
                   <th className="px-4 py-3 font-bold">Type</th>

@@ -4,17 +4,16 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import DashboardLayout from './layouts/DashboardLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ReviewDetail from './pages/ReviewDetail';
 import Admin from './pages/Admin';
-
-// Placeholder Pages
-const NewReview = () => <div className="p-8">New Review Workflow Placeholder</div>;
-const ReviewsList = () => <div className="p-8">Reviews History Placeholder</div>;
-const Settings = () => <div className="p-8">Settings Placeholder</div>;
+import NewReview from './pages/NewReview';
+import ReviewsList from './pages/ReviewsList';
+import Settings from './pages/Settings';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -47,8 +46,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
+        <ThemeProvider>
+          <AuthProvider>
+            <Routes>
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -75,7 +75,8 @@ function App() {
             <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
           </Routes>
           <Toaster position="top-right" />
-        </AuthProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );

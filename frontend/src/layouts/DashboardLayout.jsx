@@ -15,15 +15,16 @@ import { useAuth } from '../contexts/AuthContext';
 import { useSystemHealth } from '../hooks/useSystem';
 import { clsx } from 'clsx';
 import StatusDot from '../components/StatusDot';
+import ThemeToggle from '../components/ThemeToggle';
 
 const SidebarItem = ({ icon: Icon, label, to, active, collapsed }) => (
   <Link
     to={to}
     className={clsx(
-      'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors mb-1',
+      'flex items-center gap-3 px-3 py-3 rounded-2xl transition-colors mb-2',
       active
-        ? 'bg-primary-main text-white'
-        : 'text-text-muted hover:bg-slate-100 hover:text-text-base'
+        ? 'bg-primary-main text-white shadow-soft'
+        : 'text-text-muted hover:bg-surface-muted hover:text-text-base'
     )}
   >
     <Icon size={20} className="shrink-0" />
@@ -55,19 +56,19 @@ const DashboardLayout = () => {
   }
 
   return (
-    <div className="flex h-screen bg-surface-app overflow-hidden">
+    <div className="flex h-screen bg-surface-app overflow-hidden text-text-base">
       {/* Sidebar */}
       <aside
         className={clsx(
-          "bg-surface-card border-r border-surface-border flex flex-col transition-all duration-300",
-          collapsed ? "w-20" : "w-64"
+          'bg-surface-card border-r border-surface-border flex flex-col transition-all duration-300',
+          collapsed ? 'w-20' : 'w-72'
         )}
       >
-        <div className="p-4 border-b border-surface-border flex items-center justify-between">
-          {!collapsed && <span className="text-xl font-bold text-primary-main">CodeSage</span>}
+        <div className="p-5 border-b border-surface-border flex items-center justify-between gap-3">
+          {!collapsed && <span className="text-xl font-bold text-text-base">CodeSage</span>}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-1.5 hover:bg-slate-100 rounded-md text-text-muted"
+            className="p-2 rounded-2xl bg-surface-muted text-text-muted hover:bg-surface-border transition-colors"
           >
             {collapsed ? <Menu size={20} /> : <X size={20} />}
           </button>
@@ -118,6 +119,7 @@ const DashboardLayout = () => {
               </h2>
            </div>
            <div className="flex items-center gap-4">
+              <ThemeToggle />
               <div className={clsx(
                 "flex items-center gap-2 px-3 py-1 text-xs font-medium rounded-full border",
                 health?.status === 'online'

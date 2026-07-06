@@ -73,7 +73,7 @@ python -m venv .venv
 source .venv/bin/activate # or .venv\Scripts\activate on Windows
 pip install -r requirements.txt
 alembic upgrade head
-python scripts/seed_admin.py # Creates admin@codesage.local / admin_password_123
+python scripts/seed_admin.py # Creates admin@codesage.local / Demo2026!
 python app/main.py
 ```
 
@@ -99,11 +99,11 @@ CodeSage/
 ```
 
 ## 📊 Demo & Verification
-To verify the application with a realistic dataset, run the V1 Release Seed script:
+To verify the application with a realistic dataset, run the demo data generator:
 ```bash
-python demo/sample-data/v1_release_seed.py
+python demo/sample_data/seed.py --profile enterprise --reset
 ```
-This will populate your local database with **20 projects** and **170+ reviews**, demonstrating the full range of charts, trends, and AI insights.
+This will populate your local database with a realistic enterprise dataset and seed the default admin/demo accounts.
 
 ---
 *Developed as a portfolio-quality engineering project during a software engineering internship.*

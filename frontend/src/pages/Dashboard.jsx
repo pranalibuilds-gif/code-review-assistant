@@ -19,11 +19,11 @@ const Dashboard = () => {
 
   if (isLoading) {
     return <div className="animate-pulse space-y-8">
-      <div className="h-40 bg-slate-200 rounded-xl" />
+      <div className="h-40 bg-surface-muted rounded-xl" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="h-32 bg-slate-200 rounded-xl" />
-        <div className="h-32 bg-slate-200 rounded-xl" />
-        <div className="h-32 bg-slate-200 rounded-xl" />
+        <div className="h-32 bg-surface-muted rounded-xl" />
+        <div className="h-32 bg-surface-muted rounded-xl" />
+        <div className="h-32 bg-surface-muted rounded-xl" />
       </div>
     </div>;
   }
@@ -69,19 +69,19 @@ const Dashboard = () => {
             {qualityHistory.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={qualityHistory}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--surface-border)" />
                   <XAxis
                     dataKey="name"
                     axisLine={false}
                     tickLine={false}
-                    tick={{fontSize: 10, fill: '#64748b'}}
+                    tick={{fontSize: 10, fill: 'var(--text-muted)'}}
                     dy={10}
                   />
                   <YAxis
                     domain={[0, 100]}
                     axisLine={false}
                     tickLine={false}
-                    tick={{fontSize: 10, fill: '#64748b'}}
+                    tick={{fontSize: 10, fill: 'var(--text-muted)'}}
                   />
                   <Tooltip
                     contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}}
@@ -104,10 +104,10 @@ const Dashboard = () => {
           </div>
         </Card>
 
-        <Card className="p-6 bg-slate-900 text-white border-none flex flex-col justify-center gap-6">
+        <Card className="p-6 bg-primary-main text-white border-none flex flex-col justify-center gap-6">
            <div>
               <h2 className="text-2xl font-bold mb-2">Ready for a Review?</h2>
-              <p className="text-slate-400 text-sm">Submit your latest code and let CodeSage identify improvements.</p>
+              <p className="text-white/80 text-sm">Submit your latest code and let CodeSage identify improvements.</p>
            </div>
            <Button
             size="lg"
@@ -208,7 +208,7 @@ const Dashboard = () => {
            </Card>
 
            <AIInsightCard
-              insight={{
+              insight={data?.recent_reviews?.[0]?.recommendations?.[0] || {
                 title: "Refactor logic to services",
                 description: "Several of your recent reviews show business logic inside route handlers. Move this to the Service layer to improve testability and reuse."
               }}

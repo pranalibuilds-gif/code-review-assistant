@@ -3,11 +3,11 @@ import { clsx } from 'clsx';
 
 const SeverityBadge = ({ severity }) => {
   const styles = {
-    CRITICAL: 'bg-red-100 text-red-800 border-red-200',
-    HIGH: 'bg-orange-100 text-orange-800 border-orange-200',
-    MEDIUM: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    LOW: 'bg-blue-100 text-blue-800 border-blue-200',
-    INFO: 'bg-slate-100 text-slate-800 border-slate-200',
+    CRITICAL: 'bg-red-500/10 text-red-400 border-red-500/10',
+    HIGH: 'bg-orange-500/10 text-orange-300 border-orange-500/10',
+    MEDIUM: 'bg-amber-500/10 text-amber-300 border-amber-500/10',
+    LOW: 'bg-sky-500/10 text-sky-300 border-sky-500/10',
+    INFO: 'bg-slate-700 text-slate-200 border-slate-700',
   };
 
   return (

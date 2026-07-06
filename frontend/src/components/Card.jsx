@@ -7,7 +7,7 @@ const Card = ({ children, className, ...props }) => {
     <div
       className={twMerge(
         clsx(
-          'bg-surface-card rounded-xl border border-surface-border shadow-sm overflow-hidden',
+          'bg-surface-card rounded-[28px] border border-surface-border shadow-soft overflow-hidden',
           className
         )
       )}

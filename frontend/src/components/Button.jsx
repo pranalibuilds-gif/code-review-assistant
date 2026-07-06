@@ -12,10 +12,10 @@ const Button = ({
   ...props
 }) => {
   const variants = {
-    primary: 'bg-primary-main text-white hover:bg-indigo-700 shadow-sm',
-    secondary: 'bg-surface-card text-text-base border border-surface-border hover:bg-slate-50',
-    danger: 'bg-status-error text-white hover:bg-red-700',
-    ghost: 'bg-transparent text-text-muted hover:bg-slate-100 hover:text-text-base',
+    primary: 'bg-primary-main text-white hover:bg-primary-soft shadow-soft',
+    secondary: 'bg-surface-muted text-text-base border border-surface-border hover:bg-surface-border',
+    danger: 'bg-status-error text-white hover:bg-red-600 shadow-sm',
+    ghost: 'bg-transparent text-text-muted hover:bg-surface-muted hover:text-text-base',
   };
 
   const sizes = {
@@ -28,7 +28,7 @@ const Button = ({
     <button
       className={twMerge(
         clsx(
-          'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
+          'inline-flex items-center justify-center rounded-2xl font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-main/50 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
           variants[variant],
           sizes[size],
           className

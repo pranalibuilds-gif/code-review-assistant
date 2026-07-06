@@ -54,6 +54,13 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     Handler for Pydantic validation errors.
     """
     request_id = getattr(request.state, "request_id", "unknown")
+    errors = exc.errors()
+
+    msg = "Input validation failed."
+    if errors:
+        error = errors[0]
+        field = " -> ".join([str(loc) for loc in error.get("loc", [])])
+        msg = f"Validation Error: {error.get('msg')} ({field})"
 
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -61,8 +68,8 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             "success": False,
             "error": {
                 "code": "VALIDATION_ERROR",
-                "message": "Input validation failed.",
-                "details": exc.errors(),
+                "message": msg,
+                "details": errors,
                 "request_id": request_id
             }
         },

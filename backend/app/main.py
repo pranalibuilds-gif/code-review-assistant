@@ -12,7 +12,7 @@ from app.core.exceptions import (
     http_exception_handler,
     validation_exception_handler
 )
-from app.api.v1 import auth, submissions, reviews, dashboard, admin
+from app.api.v1 import auth, submissions, reviews, dashboard, admin, projects
 
 # Initialize logging
 setup_logging()
@@ -33,8 +33,8 @@ app.add_middleware(
 )
 
 # Register Custom Middleware
-app.add_middleware(LoggingMiddleware)
 app.add_middleware(RequestIDMiddleware)
+app.add_middleware(LoggingMiddleware)
 
 # Register Exception Handlers
 app.add_exception_handler(Exception, global_exception_handler)
@@ -42,7 +42,7 @@ app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 
 # API v1 Router
-api_router = APIRouter()
+api_router = APIRouter(redirect_slashes=False)
 
 @api_router.get("/health")
 async def health_check():
@@ -84,6 +84,7 @@ api_router.include_router(submissions.router, prefix="/submissions", tags=["subm
 api_router.include_router(reviews.router, prefix="/reviews", tags=["reviews"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
 api_router.include_router(admin.router, prefix="/admin", tags=["admin"])
+api_router.include_router(projects.router, prefix="/projects", tags=["projects"])
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

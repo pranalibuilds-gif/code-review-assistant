@@ -2,25 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --primary-main: #8b5cf6;
+    --primary-soft: #7c3aed;
+    --primary-muted: #d8b4fe;
+
+    --surface-app: #f8fafc;
+    --surface-card: #ffffff;
+    --surface-border: #e2e8f0;
+    --surface-muted: #f1f5f9;
+
+    --text-base: #0f172a;
+    --text-muted: #64748b;
+    --text-inverse: #ffffff;
+
+    --status-success: #22c55e;
+    --status-warning: #f59e0b;
+    --status-error: #ef4444;
+    --status-info: #38bdf8;
+
+    --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .dark {
+    --surface-app: #090b16;
+    --surface-card: #111827;
+    --surface-border: #1f2937;
+    --surface-muted: #0f172a;
+
+    --text-base: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-inverse: #ffffff;
+
+    --shadow-soft: 0 24px 80px rgba(0, 0, 0, 0.45);
+  }
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: Inter, system-ui, sans-serif;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--surface-app);
+  color: var(--text-base);
+  font-feature-settings: "cv02" 1, "cv05" 1, "ss01" 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  color: var(--text-base) !important;
+  background-color: var(--surface-card) !important;
+  border-color: var(--surface-border) !important;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.25);
+  color: #ffffff;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.05), transparent 25%),
+              radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.04), transparent 22%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dark body::before {
+  background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.18), transparent 25%),
+              radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.14), transparent 22%);
 }

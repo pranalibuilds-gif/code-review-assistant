@@ -55,7 +55,7 @@ const Register = () => {
                     <input
                       name="full_name"
                       required
-                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-surface-border rounded-lg outline-none focus:ring-2 focus:ring-primary-main/20 focus:border-primary-main transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-surface-app border border-surface-border rounded-2xl outline-none focus:ring-2 focus:ring-primary-main/20 focus:border-primary-main transition-all text-text-base"
                       placeholder="Jane Doe"
                       value={formData.full_name}
                       onChange={handleChange}
@@ -70,7 +70,7 @@ const Register = () => {
                     <input
                       name="username"
                       required
-                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-surface-border rounded-lg outline-none focus:ring-2 focus:ring-primary-main/20 focus:border-primary-main transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-surface-app border border-surface-border rounded-2xl outline-none focus:ring-2 focus:ring-primary-main/20 focus:border-primary-main transition-all text-text-base"
                       placeholder="janedev"
                       value={formData.username}
                       onChange={handleChange}
@@ -86,7 +86,7 @@ const Register = () => {
                       name="email"
                       type="email"
                       required
-                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-surface-border rounded-lg outline-none focus:ring-2 focus:ring-primary-main/20 focus:border-primary-main transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-surface-app border border-surface-border rounded-2xl outline-none focus:ring-2 focus:ring-primary-main/20 focus:border-primary-main transition-all text-text-base"
                       placeholder="jane@example.com"
                       value={formData.email}
                       onChange={handleChange}
@@ -103,7 +103,7 @@ const Register = () => {
                       type="password"
                       required
                       minLength={8}
-                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-surface-border rounded-lg outline-none focus:ring-2 focus:ring-primary-main/20 focus:border-primary-main transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-surface-app border border-surface-border rounded-2xl outline-none focus:ring-2 focus:ring-primary-main/20 focus:border-primary-main transition-all text-text-base"
                       placeholder="••••••••"
                       value={formData.password}
                       onChange={handleChange}
