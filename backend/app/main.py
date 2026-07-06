@@ -12,7 +12,7 @@ from app.core.exceptions import (
     http_exception_handler,
     validation_exception_handler
 )
-from app.api.v1 import auth, submissions, reviews, dashboard
+from app.api.v1 import auth, submissions, reviews, dashboard, admin
 
 # Initialize logging
 setup_logging()
@@ -83,6 +83,7 @@ api_router.include_router(auth.router, prefix="/auth", tags=["authentication"])
 api_router.include_router(submissions.router, prefix="/submissions", tags=["submissions"])
 api_router.include_router(reviews.router, prefix="/reviews", tags=["reviews"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
+api_router.include_router(admin.router, prefix="/admin", tags=["admin"])
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

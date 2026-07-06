@@ -8,3 +8,4 @@ from app.models.review import Review  # noqa
 from app.models.finding import Finding  # noqa
 from app.models.metric import Metric  # noqa
 from app.models.artifact import Artifact  # noqa
+from app.models.audit_log import AuditLog  # noqa

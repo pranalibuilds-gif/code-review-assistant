@@ -8,11 +8,13 @@ from app.repositories.user_repository import UserRepository
 from app.schemas.auth import UserCreate, LoginRequest, Token
 from app.services.password_service import PasswordService
 from app.services.jwt_service import JWTService
+from app.services.admin.audit_service import AuditService
 
 class AuthService:
     def __init__(self, db: Session):
         self.repo = UserRepository(db)
         self.db = db
+        self.audit_service = AuditService(db)
 
     def register_user(self, user_in: UserCreate) -> User:
         if self.repo.get_by_email(user_in.email):
@@ -54,6 +56,12 @@ class AuthService:
         # Update last login
         user.last_login_at = datetime.now(timezone.utc)
         self.db.commit()
+
+        self.audit_service.log_action(
+            user_id=user.id,
+            action="USER_LOGIN",
+            details=f"User logged in from web UI"
+        )
 
         access_token = JWTService.create_access_token(
             subject=user.id,
