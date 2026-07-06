@@ -1,11 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from uuid import UUID
+import os
 
 from app.core.security import get_current_user, get_db
 from app.models.user import User
 from app.models.review import Review
 from app.schemas.report import ReviewDetailedResponse
+from app.services.export_service import ExportService
 
 router = APIRouter()
 
@@ -36,3 +39,41 @@ def get_review_report(
         "data": review.cached_report,
         "request_id": getattr(request.state, "request_id", "N/A")
     }
+
+@router.get("/{review_id}/export/{format}")
+def export_review(
+    review_id: UUID,
+    format: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Generate and download a review report in the specified format (pdf, md, json).
+    """
+    review = db.get(Review, review_id)
+    if not review:
+        raise HTTPException(status_code=404, detail="Review not found")
+
+    if review.submission.project.owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    service = ExportService(db)
+    try:
+        file_path = service.generate_export(review_id, format.lower())
+
+        # Determine media type
+        media_types = {
+            "pdf": "application/pdf",
+            "md": "text/markdown",
+            "json": "application/json"
+        }
+
+        return FileResponse(
+            path=file_path,
+            filename=os.path.basename(file_path),
+            media_type=media_types.get(format.lower(), "application/octet-stream")
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")
