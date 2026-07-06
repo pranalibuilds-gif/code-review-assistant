@@ -12,7 +12,9 @@ import {
   User
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useSystemHealth } from '../hooks/useSystem';
 import { clsx } from 'clsx';
+import StatusDot from '../components/StatusDot';
 
 const SidebarItem = ({ icon: Icon, label, to, active, collapsed }) => (
   <Link
@@ -31,6 +33,7 @@ const SidebarItem = ({ icon: Icon, label, to, active, collapsed }) => (
 
 const DashboardLayout = () => {
   const { user, logout } = useAuth();
+  const { data: health } = useSystemHealth();
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -115,9 +118,14 @@ const DashboardLayout = () => {
               </h2>
            </div>
            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-3 py-1 bg-status-success/10 text-status-success text-xs font-medium rounded-full border border-status-success/20">
-                <div className="w-1.5 h-1.5 rounded-full bg-status-success" />
-                AI Service Online
+              <div className={clsx(
+                "flex items-center gap-2 px-3 py-1 text-xs font-medium rounded-full border",
+                health?.status === 'online'
+                  ? "bg-status-success/10 text-status-success border-status-success/20"
+                  : "bg-status-error/10 text-status-error border-status-error/20"
+              )}>
+                <StatusDot status={health?.status === 'online' ? 'online' : 'offline'} />
+                AI Service {health?.status === 'online' ? 'Online' : 'Offline'}
               </div>
            </div>
         </header>

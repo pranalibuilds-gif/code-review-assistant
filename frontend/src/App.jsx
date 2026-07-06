@@ -5,12 +5,11 @@ import { Toaster } from 'react-hot-toast';
 
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import DashboardLayout from './layouts/DashboardLayout';
-import Button from './components/Button';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 // Placeholder Pages
-const Login = () => <div className="p-8">Login Page Placeholder</div>;
-const Register = () => <div className="p-8">Register Page Placeholder</div>;
-const Dashboard = () => <div className="p-8">Dashboard Content Placeholder</div>;
 const NewReview = () => <div className="p-8">New Review Workflow Placeholder</div>;
 const ReviewsList = () => <div className="p-8">Reviews History Placeholder</div>;
 const ReviewDetail = () => <div className="p-8">Review Details Placeholder</div>;
