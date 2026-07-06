@@ -1,83 +1,106 @@
-# CodeSage
+# CodeSage 🛡️
 
-CodeSage is an AI-powered code review platform designed to automate and enhance the software code review process. It combines traditional static code analysis (Pylint, Bandit, Radon) with Large Language Models (LLMs) to provide meaningful insights into code quality, security, and maintainability.
+**AI-Powered Code Review Platform for Modern Developers.**
 
-## Project Vision
-To build an intelligent developer assistant that acts as an experienced senior software engineer by automatically reviewing source code, explaining issues clearly, and suggesting actionable improvements.
+CodeSage is a professional-grade tool designed to automate and enhance the software code review process. It bridges the gap between deterministic static analysis and heuristic AI reasoning, acting as a "Senior Developer in a Box" to help developers write cleaner, safer, and more maintainable Python code.
 
-## Current Status: Phase 1 — Project Skeleton
-The project is currently in the **Project Skeleton** phase. We have established the repository structure and initialized the backend and frontend scaffolds.
+---
 
-## Repository Structure
-- `backend/`: FastAPI application, dependency management, and analysis logic.
-- `frontend/`: Vite + React + Tailwind CSS dashboard.
-- `docs/`: Architectural blueprints and design specifications.
+## 🚀 Key Features
 
-## Setup Instructions
+- **Hybrid Analysis Engine:** Combines trusted static tools (**Pylint, Bandit, Radon**) with Local LLMs (**Ollama**) for multi-layered insights.
+- **AI Mentor:** Receives educational summaries and actionable refactoring recommendations instead of just "fixing bugs."
+- **Command Center Dashboard:** Tracks project health over time with quality trends and severity distributions.
+- **Unified Submission Pipeline:** Ingest code via raw paste, ZIP upload, or direct GitHub repository cloning.
+- **Professional Artifacts:** Generate and export review reports in **PDF, Markdown, and JSON** formats.
+- **Graceful Degradation:** Resilient architecture that delivers static results even if AI services are offline.
+- **Enterprise-Ready Infrastructure:** Includes JWT authentication, RBAC, audit logging, and structured observability.
+
+---
+
+## 🏗️ Architecture Overview
+
+CodeSage follows **Clean Architecture** principles, strictly separating business logic from frameworks and external providers.
+
+```mermaid
+graph TD
+    Client[React Dashboard] -->|REST API| API[FastAPI Gateway]
+    API -->|Auth| Security[JWT & RBAC]
+    API -->|Submit| Pipeline[Ingestion Pipeline]
+    
+    subgraph "Analysis Core"
+        Pipeline -->|Normalize| Workspace[Temporary Workspace]
+        Workspace -->|Parallel| Static[Static Analyzers: Pylint/Bandit/Radon]
+        Static -->|Normalized Findings| AI[AI Mentor: Ollama LLM]
+        AI -->|Synthesis| Aggregator[Aggregation Engine]
+    end
+    
+    Aggregator -->|Cache| DB[(PostgreSQL)]
+    Aggregator -->|Generate| Export[Export Engine: PDF/MD/JSON]
+```
+
+---
+
+## 🛠️ Technology Stack
+
+- **Backend:** Python 3.12, FastAPI, SQLAlchemy (ORM), Alembic (Migrations)
+- **Frontend:** React 18, Vite, Tailwind CSS, TanStack Query, Recharts
+- **Database:** PostgreSQL
+- **AI Engine:** Ollama (Llama 3)
+- **Tooling:** Ruff (Linting/Formatting), Pytest (Testing), ReportLab (PDF)
+
+---
+
+## 💻 Local Setup
 
 ### Prerequisites
 - Python 3.12+
 - Node.js 18+
-- [Ollama](https://ollama.com/) (for AI analysis features)
+- [Ollama](https://ollama.com/) (installed and running)
+- PostgreSQL
 
-### Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Create a virtual environment:
-   ```bash
-   python -m venv .venv
-   ```
-3. Activate the virtual environment:
-   - Windows: `.venv\Scripts\activate`
-   - Unix/macOS: `source .venv/bin/activate`
-4. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-5. Create a `.env` file based on `.env.example`:
-   ```bash
-   cp ../.env.example .env
-   ```
-6. Start the development server:
-   ```bash
-   python app/main.py
-   ```
+### 1. Clone & Foundation
+```bash
+git clone https://github.com/pranalibuilds-gif/code-review-assistant.git
+cd code-review-assistant
+cp .env.example .env # Update with your DB credentials
+```
 
-### Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+### 2. Backend Setup
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate # or .venv\Scripts\activate on Windows
+pip install -r requirements.txt
+alembic upgrade head
+python scripts/seed_admin.py # Creates admin@codesage.local / admin_password_123
+python app/main.py
+```
 
-## Development Philosophy
-CodeSage is being developed incrementally. Each phase introduces one architectural capability and is considered complete only after engineering review and validation.
-
-## Core Tech Stack
-- **Backend:** Python 3.12+, FastAPI
-- **Frontend:** React
-- **Analysis Engine:** Pylint, Bandit, Radon
-- **AI Engine:** Ollama (Local LLM)
-- **Database:** PostgreSQL
-- **Tooling:** Ruff (Linting & Formatting)
-
-## Engineering Principles
-- **Clean Architecture:** Strict separation of concerns between API, Domain, and Infrastructure.
-- **Privacy-First:** Local-first analysis with transient source code handling.
-- **Hybrid Analysis:** Combining deterministic static analysis with heuristic AI reasoning.
-- **Observability:** Built-in request tracing and structured logging.
-
-## Development Roadmap
-The project is being built in 15 dependency-driven phases. See the [Project Understanding Document](./PUD.docx) for the full architectural blueprint.
+### 3. Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 ---
-*Developed during a software engineering internship as a portfolio-quality learning project.*
+
+## 📄 Documentation
+
+- [Architecture Deep-Dive](./docs/architecture/system-overview.md)
+- [API Reference](./docs/api/endpoints.md)
+- [Database Schema](./docs/architecture/database-design.md)
+- [Submission Pipeline](./docs/architecture/submission-pipeline.md)
+
+---
+
+## 📈 Future Roadmap
+
+- **Multi-Language Support:** Adding JavaScript, Java, and Go analyzers.
+- **CI/CD Integration:** Direct GitHub Action and GitLab Runner support.
+- **Team Workspaces:** Collaborative reviews and organization dashboards.
+- **IDE Plugins:** Extension for VS Code and JetBrains IDEs.
+
+---
+*Developed as a portfolio-quality engineering project during a software engineering internship.*
