@@ -1,0 +1,70 @@
+# --- CodeSage Version Control Policy v1.0 ---
+
+# Local Environments
+.venv/
+env/
+node_modules/
+
+# Secrets & Credentials
+.env
+.env.*
+!.env.example
+*.secret
+
+# Python Artifacts & Caches
+__pycache__/
+*.py[cod]
+*.pyd
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Testing & Coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# Python Packaging
+*.egg-info/
+.eggs/
+
+# React/Node Build Outputs
+build/
+dist/
+.next/
+
+# Databases
+*.sqlite3
+*.db
+
+# Compressed Archives
+*.zip
+*.tar.gz
+
+# Application Data & Temporary Workspaces
+# (Ensuring transient source code never enters Git)
+uploads/
+temp/
+generated_reports/
+
+# Logs
+*.log
+logs/
+
+# IDE Metadata (Personal)
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# OS Noise
+.DS_Store
+Thumbs.db
+~$*
+
+# Developer Convenience (Local version managers)
+.python-version
+.tool-versions

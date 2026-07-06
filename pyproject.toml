@@ -1,0 +1,22 @@
+[project]
+name = "codesage"
+version = "0.0.1"
+description = "AI-powered code review platform"
+requires-python = ">=3.12"
+
+[tool.ruff]
+# Target version for Python
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+# Enable specific rule sets
+select = ["E", "F", "B", "I"]
+# E: pycodestyle errors
+# F: Pyflakes
+# B: flake8-bugbear
+# I: isort (Import sorting)
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
