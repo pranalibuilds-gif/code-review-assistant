@@ -12,6 +12,8 @@ from app.services.workspace_service import WorkspaceService
 from app.services.file_discovery_service import FileDiscoveryService
 from app.services.archive_service import ArchiveService
 from app.services.github_service import GitHubService
+from app.services.review_service import ReviewService
+from app.analyzers.orchestrator import StaticAnalysisOrchestrator
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +21,8 @@ class SubmissionService:
     def __init__(self, db: Session):
         self.db = db
         self.repo = SubmissionRepository(db)
+        self.review_service = ReviewService(db)
+        self.orchestrator = StaticAnalysisOrchestrator()
 
     def process_paste(self, project_id: uuid.UUID, code: str, filename: str, background_tasks: BackgroundTasks):
         submission = self._create_initial_submission(project_id, SubmissionType.PASTE)
@@ -112,9 +116,27 @@ class SubmissionService:
             }
             WorkspaceService.write_manifest(workspace_path, manifest)
 
-            # 3. Ready for Analysis (Future phases take over here)
+            # 3. Ready for Analysis
             self._update_status(submission_id, ReviewStatus.READY_FOR_ANALYSIS)
             logger.info(f"Submission {submission_id} is ready for analysis.")
+
+            # 4. Run Static Analysis
+            self._update_status(submission_id, ReviewStatus.STATIC_ANALYSIS)
+            self.review_service.create_or_update_review(submission_id, ReviewStatus.STATIC_ANALYSIS)
+
+            analysis_results = await self.orchestrator.run_all(workspace_path)
+
+            # 5. Synthesis & Persistence
+            self.review_service.create_or_update_review(
+                submission_id=submission_id,
+                status=analysis_results["status"],
+                findings=analysis_results["findings"],
+                metrics=analysis_results["metrics"],
+                metadata=analysis_results["metadata"]
+            )
+
+            self._update_status(submission_id, analysis_results["status"])
+            logger.info(f"Analysis for submission {submission_id} completed with status: {analysis_results['status']}")
 
         except Exception as e:
             logger.error(f"Pipeline failed for submission {submission_id}: {str(e)}")

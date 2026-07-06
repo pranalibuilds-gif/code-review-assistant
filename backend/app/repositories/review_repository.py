@@ -23,6 +23,12 @@ class ReviewRepository:
         return review
 
     def update(self, review: Review) -> Review:
+        # Just commit if the object is already attached to session
         self.db.commit()
         self.db.refresh(review)
         return review
+
+    def save(self, review: Review) -> Review:
+        if review.id and self.get_by_id(review.id):
+            return self.update(review)
+        return self.create(review)
