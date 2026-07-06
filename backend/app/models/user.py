@@ -1,11 +1,15 @@
 import uuid
 from enum import Enum
 from datetime import datetime
+from typing import List, TYPE_CHECKING
 from sqlalchemy import String, Boolean, DateTime, Enum as SQLEnum
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 
 from app.db.base_class import Base
+
+if TYPE_CHECKING:
+    from .project import Project
 
 class UserRole(str, Enum):
     USER = "user"
@@ -34,6 +38,11 @@ class User(Base):
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
     last_login_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+
+    # Relationships
+    projects: Mapped[List["Project"]] = relationship(
+        "Project", back_populates="owner", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<User {self.email} ({self.role})>"
