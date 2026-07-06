@@ -27,6 +27,7 @@ class Review(Base):
     overall_score: Mapped[float] = mapped_column(Float, default=0.0)
     summary: Mapped[str] = mapped_column(Text, nullable=True)
     ai_summary: Mapped[str] = mapped_column(Text, nullable=True)
+    recommendations: Mapped[str] = mapped_column(Text, nullable=True)
 
     status: Mapped[ReviewStatus] = mapped_column(
         SQLEnum(ReviewStatus), default=ReviewStatus.QUEUED, nullable=False

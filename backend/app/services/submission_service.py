@@ -1,5 +1,6 @@
 import uuid
 import logging
+import json
 from datetime import datetime, timezone
 from fastapi import BackgroundTasks, UploadFile, HTTPException
 from sqlalchemy.orm import Session
@@ -13,6 +14,7 @@ from app.services.file_discovery_service import FileDiscoveryService
 from app.services.archive_service import ArchiveService
 from app.services.github_service import GitHubService
 from app.services.review_service import ReviewService
+from app.services.ai_review_service import AIReviewService
 from app.analyzers.orchestrator import StaticAnalysisOrchestrator
 
 logger = logging.getLogger(__name__)
@@ -22,6 +24,7 @@ class SubmissionService:
         self.db = db
         self.repo = SubmissionRepository(db)
         self.review_service = ReviewService(db)
+        self.ai_service = AIReviewService()
         self.orchestrator = StaticAnalysisOrchestrator()
 
     def process_paste(self, project_id: uuid.UUID, code: str, filename: str, background_tasks: BackgroundTasks):
@@ -124,19 +127,33 @@ class SubmissionService:
             self._update_status(submission_id, ReviewStatus.STATIC_ANALYSIS)
             self.review_service.create_or_update_review(submission_id, ReviewStatus.STATIC_ANALYSIS)
 
-            analysis_results = await self.orchestrator.run_all(workspace_path)
+            static_results = await self.orchestrator.run_all(workspace_path)
 
-            # 5. Synthesis & Persistence
-            self.review_service.create_or_update_review(
-                submission_id=submission_id,
-                status=analysis_results["status"],
-                findings=analysis_results["findings"],
-                metrics=analysis_results["metrics"],
-                metadata=analysis_results["metadata"]
+            # 5. Run AI Review
+            self._update_status(submission_id, ReviewStatus.AI_ANALYSIS)
+            ai_result = await self.ai_service.run_review(
+                src_path=src_path,
+                static_findings=static_results["findings"],
+                metrics=static_results["metrics"]
             )
 
-            self._update_status(submission_id, analysis_results["status"])
-            logger.info(f"Analysis for submission {submission_id} completed with status: {analysis_results['status']}")
+            # 6. Synthesis & Persistence
+            final_status = ReviewStatus.COMPLETED if ai_result.success else ReviewStatus.PARTIAL_SUCCESS
+            if static_results["status"] == ReviewStatus.FAILED:
+                final_status = ReviewStatus.FAILED
+
+            self.review_service.create_or_update_review(
+                submission_id=submission_id,
+                status=final_status,
+                findings=static_results["findings"] + ai_result.findings,
+                metrics=static_results["metrics"],
+                ai_summary=ai_result.summary,
+                summary=ai_result.overall_assessment,
+                recommendations=json.dumps([r.model_dump() for r in ai_result.recommendations]) if ai_result.recommendations else None
+            )
+
+            self._update_status(submission_id, final_status)
+            logger.info(f"Analysis for submission {submission_id} completed with status: {final_status}")
 
         except Exception as e:
             logger.error(f"Pipeline failed for submission {submission_id}: {str(e)}")

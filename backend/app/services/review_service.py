@@ -28,7 +28,10 @@ class ReviewService:
         status: ReviewStatus,
         findings: List[NormalizedFinding] = None,
         metrics: List[NormalizedMetric] = None,
-        metadata: List[Dict] = None
+        metadata: List[Dict] = None,
+        ai_summary: str = None,
+        summary: str = None,
+        recommendations: str = None
     ) -> Review:
         review = self.review_repo.get_by_submission(submission_id)
 
@@ -41,6 +44,13 @@ class ReviewService:
             review = self.review_repo.create(review)
         else:
             review.status = status
+
+        if ai_summary:
+            review.ai_summary = ai_summary
+        if summary:
+            review.summary = summary
+        if recommendations:
+            review.recommendations = recommendations
 
         if status in [ReviewStatus.COMPLETED, ReviewStatus.PARTIAL_SUCCESS, ReviewStatus.FAILED]:
             review.finished_at = datetime.now(timezone.utc)
