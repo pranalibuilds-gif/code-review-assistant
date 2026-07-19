@@ -48,6 +48,13 @@ const NewReview = () => {
     }
   });
 
+  // Auto-select first project if available
+  useEffect(() => {
+    if (projects && projects.length > 0 && !selectedProjectId) {
+      setSelectedProjectId(projects[0].id);
+    }
+  }, [projects, selectedProjectId]);
+
   const createProjectMutation = useMutation({
     mutationFn: createProject,
     onSuccess: (res) => {
@@ -99,6 +106,34 @@ const NewReview = () => {
     }
     return () => clearInterval(interval);
   }, [step, jobId, navigate]);
+
+  const handleStartAnalysis = () => {
+    // Check if a project is selected
+    if (!selectedProjectId || selectedProjectId === "") {
+      toast.error('Please select or create a project first.');
+      return;
+    }
+
+    // Detailed validation based on source
+    if (source === 'PASTE') {
+      if (!code || !code.trim()) {
+        toast.error('Please paste your code snippet.');
+        return;
+      }
+    } else if (source === 'GITHUB') {
+      if (!githubUrl || !githubUrl.trim()) {
+        toast.error('Please provide a GitHub repository URL.');
+        return;
+      }
+    } else if (source === 'UPLOAD') {
+      if (!file) {
+        toast.error('Please upload a ZIP file.');
+        return;
+      }
+    }
+
+    submitMutation.mutate();
+  };
 
   const handleSourceSelect = (src) => {
     setSource(src);
@@ -161,9 +196,12 @@ const NewReview = () => {
                   value={selectedProjectId}
                   onChange={(e) => setSelectedProjectId(e.target.value)}
                 >
-                  <option value="">Select a project...</option>
+                  {!selectedProjectId && <option value="">Select a project...</option>}
                   {projects?.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
+                {projects?.length === 0 && !isCreatingProject && (
+                  <p className="text-xs text-status-warning mt-2">No projects found. Create one using the + button.</p>
+                )}
                 <Button variant="secondary" onClick={() => setIsCreatingProject(true)}>
                   <Plus size={18} />
                 </Button>
@@ -176,6 +214,12 @@ const NewReview = () => {
                   className="flex-1 p-2.5 bg-surface-app border border-surface-border rounded-2xl outline-none text-text-base"
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      if (newProjectName.trim()) createProjectMutation.mutate({ name: newProjectName });
+                    }
+                  }}
                 />
                 <Button
                   onClick={() => createProjectMutation.mutate({ name: newProjectName })}
@@ -243,8 +287,7 @@ const NewReview = () => {
 
           <Button
             className="w-full h-12 text-lg"
-            disabled={!selectedProjectId || submitMutation.isPending}
-            onClick={() => submitMutation.mutate()}
+            onClick={handleStartAnalysis}
             isLoading={submitMutation.isPending}
           >
             Start Analysis <ArrowRight size={20} className="ml-2" />

@@ -34,7 +34,7 @@ const ReviewSummaryCard = ({ review }) => {
                   Grade {review.grade}
                 </div>
              </div>
-             <ChevronRight size={18} className="text-slate-300 group-hover:text-primary-main" />
+             <ChevronRight size={18} className="text-text-muted group-hover:text-primary-main transition-colors" />
           </div>
         </div>
       </Card>

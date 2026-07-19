@@ -7,8 +7,8 @@ const AIInsightCard = ({ insight }) => {
   if (!insight) return null;
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-primary-main to-indigo-700 text-white border-none">
-      <div className="flex items-center gap-2 mb-4 text-primary-soft">
+    <Card className="p-6 bg-gradient-to-br from-primary-main to-primary-soft text-white border-none shadow-lg shadow-primary-main/20">
+      <div className="flex items-center gap-2 mb-4 text-white/70">
         <Sparkles size={18} />
         <span className="text-xs font-bold uppercase tracking-widest">Mentor Recommendation</span>
       </div>
@@ -17,7 +17,7 @@ const AIInsightCard = ({ insight }) => {
         {insight.title || "Refactoring Opportunity"}
       </h3>
 
-      <p className="text-primary-soft text-sm leading-relaxed mb-6">
+      <p className="text-white/80 text-sm leading-relaxed mb-6">
         {insight.description || "The AI is currently analyzing your recent patterns to provide actionable advice."}
       </p>
 
